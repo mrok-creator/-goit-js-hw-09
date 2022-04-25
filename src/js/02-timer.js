@@ -19,7 +19,7 @@ const options = {
   onClose: function (selectedDates) {
     if (selectedDates[0].getTime() < Date.now()) {
       return Notiflix.Notify.failure('Please choose a date in the future');
-      return alert('Please choose a date in the future');
+      //   return alert('Please choose a date in the future');
     }
     ref.btnStart.removeAttribute('disabled');
     Notiflix.Notify.success(`You choose a valid date))`);
