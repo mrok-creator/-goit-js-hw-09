@@ -1,15 +1,16 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
-let eventTimeStart = null;
 
 const ref = {
   btnStart: document.querySelector('button[data-start]'),
+  inputDate: document.querySelector('#datetime-picker'),
   daysCounter: document.querySelector('span[data-days]'),
   hoursCounter: document.querySelector('span[data-hours]'),
   minutesCounter: document.querySelector('span[data-minutes]'),
   secondsCounter: document.querySelector('span[data-seconds]'),
 };
+let timerId = null;
 
 const options = {
   enableTime: true,
@@ -24,7 +25,6 @@ const options = {
     }
     ref.btnStart.removeAttribute('disabled');
     Notiflix.Notify.success(`You choose a valid date))`);
-    eventTimeStart = selectedDates[0].getTime();
   },
 };
 
@@ -34,15 +34,21 @@ ref.btnStart.setAttribute('disabled', '');
 ref.btnStart.addEventListener('click', onStartClickInit);
 
 function onStartClickInit() {
-  setInterval(eventTimeCounter, 1000);
+  timerId = setInterval(eventTimeCounter, 1000);
 }
 
 function eventTimeCounter() {
-  const convertedData = convertMs(eventTimeStart - Date.now());
+  const date = new Date(ref.inputDate.value);
+  const convertedData = convertMs(date - Date.now());
+  if (date < Date.now()) {
+    clearInterval(timerId);
+    Notiflix.Notify.success(`Your Event Start Right Now!!`);
+    return eventTimer();
+  }
   eventTimer(convertedData);
 }
 
-function eventTimer(time = {}) {
+function eventTimer(time = { days: 0, hours: 0, minutes: 0, seconds: 0 }) {
   ref.daysCounter.textContent = `${time.days}`.padStart(2, 0);
   ref.hoursCounter.textContent = `${time.hours}`.padStart(2, 0);
   ref.minutesCounter.textContent = `${time.minutes}`.padStart(2, 0);
