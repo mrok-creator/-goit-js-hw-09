@@ -35,6 +35,7 @@ ref.btnStart.addEventListener('click', onStartClickInit);
 
 function onStartClickInit() {
   timerId = setInterval(eventTimeCounter, 1000);
+  ref.btnStart.setAttribute('disabled', '');
 }
 
 function eventTimeCounter() {
@@ -42,6 +43,7 @@ function eventTimeCounter() {
   const convertedData = convertMs(date - Date.now());
   if (date < Date.now()) {
     clearInterval(timerId);
+    ref.btnStart.removeAttribute('disabled');
     Notify.success(`Your Event Start Right Now!!`);
     return eventTimer();
   }
